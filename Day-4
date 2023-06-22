@@ -1,0 +1,172 @@
+//Question -2
+
+#include <stdio.h>
+
+typedef struct {
+    float real;
+    float imag;
+} Complex;
+
+Complex readComplex() {
+    Complex a;
+    printf("Enter real part: ");
+    scanf("%f", &a.real);
+    printf("Enter imaginary part: ");
+    scanf("%f", &a.imag);
+    return a;
+}
+
+void writeComplex(Complex a) {
+    printf("Complex Number: %.2f + %.2fi\n", a.real, a.imag);
+}
+
+void addComplex(Complex a1, Complex a2, Complex *sum) {
+    sum->real = a1.real + a2.real;
+    sum->imag = a1.imag + a2.imag;
+}
+
+void multiplyComplex(Complex a1, Complex a2, Complex *product) {
+    product->real = a1.real * a2.real - a1.imag * a2.imag;
+    product->imag = a1.real * a2.imag + a1.imag * a2.real;
+}
+
+int main() {
+    Complex num1, num2, sum, product;
+    
+    printf("Enter first complex number:\n");
+    num1 = readComplex();
+    
+    printf("Enter second complex number:\n");
+    num2 = readComplex();
+    
+    printf("\nFirst complex number: ");
+    writeComplex(num1);
+    
+    printf("Second complex number: ");
+    writeComplex(num2);
+    
+    addComplex(num1, num2, &sum);
+    printf("\nSum of the complex numbers: ");
+    writeComplex(sum);
+    
+    multiplyComplex(num1, num2, &product);
+    printf("Product of the complex numbers: ");
+    writeComplex(product);
+    
+    return 0;
+}
+
+//Question -3
+#include <stdio.h>
+
+typedef struct {
+    int hours;
+    int minutes;
+    int seconds;
+} Time;
+
+void getTimeDifference(Time t1, Time t2, Time *difference) {
+    int totalSec1 = t1.hours * 3600 + t1.minutes * 60 + t1.seconds;
+    int totalSec2 = t2.hours * 3600 + t2.minutes * 60 + t2.seconds;
+    int diffSeconds = totalSec2 - totalSec1;
+
+    difference->hours = diffSeconds / 3600;
+    diffSeconds %= 3600;
+    difference->minutes = diffSeconds / 60;
+    difference->seconds = diffSeconds % 60;
+}
+
+int main() {
+    Time startTime, endTime, timeDifference;
+
+    printf("Enter the start time:\n");
+    printf("Hours: ");
+    scanf("%d", &startTime.hours);
+    printf("Minutes: ");
+    scanf("%d", &startTime.minutes);
+    printf("Seconds: ");
+    scanf("%d", &startTime.seconds);
+
+    printf("Enter the end time:\n");
+    printf("Hours: ");
+    scanf("%d", &endTime.hours);
+    printf("Minutes: ");
+    scanf("%d", &endTime.minutes);
+    printf("Seconds: ");
+    scanf("%d", &endTime.seconds);
+
+    getTimeDifference(startTime, endTime, &timeDifference);
+
+    printf("\nTime Difference: %d hours %d minutes %d seconds\n",
+           timeDifference.hours, timeDifference.minutes, timeDifference.seconds);
+
+    return 0;
+}
+//Question -4
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    char name[50];
+    int age;
+    float marks;
+} Student;
+
+void storeData(Student *students, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("Enter details for student %d:\n", i + 1);
+        printf("Name: ");
+        fgets(students[i].name, sizeof(students[i].name), stdin);
+        printf("Age: ");
+        scanf("%d", &students[i].age);
+        printf("Marks: ");
+        scanf("%f", &students[i].marks);
+        while (getchar() != '\n'); // Clear input buffer
+    }
+}
+
+void swapFields(Student *s1, Student *s2) {
+    Student temp = *s1;
+    *s1 = *s2;
+    *s2 = temp;
+}
+
+void displayData(Student *students, int n) {
+    printf("\nStudent Data:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Student %d:\n", i + 1);
+        printf("Name: %s", students[i].name);
+        printf("Age: %d\n", students[i].age);
+        printf("Marks: %.2f\n", students[i].marks);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of students: ");
+    scanf("%d", &n);
+    while (getchar() != '\n'); // Clear input buffer
+
+    Student *students = calloc(n, sizeof(Student));
+    if (students == NULL) {
+        printf("Memory allocation failed. Exiting...\n");
+        return 1;
+    }
+
+    storeData(students, n);
+
+    printf("\nStudent data before swapping:\n");
+    displayData(students, n);
+
+    // Swap the fields of the first and second students
+    swapFields(&students[0], &students[1]);
+
+    printf("\nStudent data after swapping:\n");
+    displayData(students, n);
+
+    // Free the allocated memory
+    free(students);
+
+    return 0;
+}
+
