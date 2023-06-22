@@ -1,0 +1,126 @@
+//Question -1
+
+#include <stdio.h>
+
+int main() {
+    FILE *sFile, *dFile;
+    char sFileName[100], dFileName[100];
+    char ch;
+
+    // Get the source file name
+    printf("Enter the source file name: ");
+    scanf("%s", sFileName);
+
+    // Open the source file in read mode
+    sFile = fopen(sFileName, "r");
+    if (sFile == NULL) {
+        printf("Failed to open the source file.\n");
+        return 1;
+    }
+
+    // Get the destination file name
+    printf("Enter the destination file name: ");
+    scanf("%s", dFileName);
+
+    // Open the destination file in write mode
+    dFile = fopen(dFileName, "w");
+    if (dFile == NULL) {
+        printf("Failed to open the destination file.\n");
+        fclose(sFile);
+        return 1;
+    }
+
+    // Copy the contents of source file to destination file character by character
+    while ((ch = fgetc(sFile)) != EOF) {
+        fputc(ch, dFile);
+    }
+
+    // Close the files
+    fclose(sFile);
+    fclose(dFile);
+
+    printf("File copied successfully.\n");
+
+    return 0;
+}
+
+//Question -3
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_ENTRIES 100
+#define LINE_SIZE 100
+
+typedef struct {
+    int entryNo;
+    int sensorNo;
+    float temperature;
+    float humidity;
+    float light;
+    char timestamp[9];
+} LogEntry;
+
+void extractLogData(const char *fileName, LogEntry logEntries[], int *size) {
+    FILE *file = fopen(fileName, "r");
+    if (file == NULL) {
+        printf("Failed to open the file.\n");
+        return;
+    }
+
+    char line[LINE_SIZE];
+    *size = 0;
+
+    while (fgets(line, sizeof(line), file) && *size < MAX_ENTRIES) {
+        char *token = strtok(line, ".");
+        LogEntry *logEntry = &logEntries[*size];
+
+        logEntry->entryNo = atoi(token);
+
+        token = strtok(NULL, ".");
+        logEntry->sensorNo = atoi(token);
+
+        token = strtok(NULL, ",");
+        logEntry->temperature = atof(token);
+
+        token = strtok(NULL, ",");
+        logEntry->humidity = atof(token);
+
+        token = strtok(NULL, ",");
+        logEntry->light = atof(token);
+
+        token = strtok(NULL, "\n");
+        strncpy(logEntry->timestamp, token, sizeof(logEntry->timestamp));
+
+        (*size)++;
+    }
+
+    fclose(file);
+}
+
+void displayLogData(const LogEntry logEntries[], int size) {
+    printf("Log Data:\n");
+    for (int i = 0; i < size; i++) {
+        const LogEntry *logEntry = &logEntries[i];
+        printf("Entry %d:\n", i + 1);
+        printf("Entry No: %d\n", logEntry->entryNo);
+        printf("Sensor No: %d\n", logEntry->sensorNo);
+        printf("Temperature: %.2f\n", logEntry->temperature);
+        printf("Humidity: %.2f\n", logEntry->humidity);
+        printf("Light: %.2f\n", logEntry->light);
+        printf("Timestamp: %s\n", logEntry->timestamp);
+        printf("\n");
+    }
+}
+
+int main() {
+    LogEntry logEntries[MAX_ENTRIES];
+    int size = 0;
+
+    extractLogData("data.csv", logEntries, &size);
+    displayLogData(logEntries, size);
+
+    return 0;
+}
+
