@@ -27,3 +27,156 @@ int main() {
 }
 
 
+//Question -2
+
+#include <stdio.h>
+
+int main() {
+    int marks;
+    
+    printf("Enter the marks: ");
+    scanf("%d", &marks);
+    
+    if (marks >= 90 && marks <= 100) {
+        printf("Grade A\n");
+    } else if (marks >= 75 && marks <= 89) {
+        printf("Grade B\n");
+    } else if (marks >= 60 && marks <= 74) {
+        printf("Grade C\n");
+    } else if (marks >= 50 && marks <= 59) {
+        printf("Grade D\n");
+    } else if (marks >= 0 && marks <= 49) {
+        printf("Grade F\n");
+    } else {
+        printf("Invalid marks entered!\n");
+    }
+    
+    return 0;
+}
+
+//Question - 3
+
+#include <stdio.h>
+
+int main() {
+    int rollNo;
+    char name[50];
+    float physicsMarks, mathMarks, chemistryMarks;
+    float totalMarks, percentage;
+    
+    printf("Enter Roll No: ");
+    scanf("%d", &rollNo);
+    
+    printf("Enter Name: ");
+    scanf(" %[^\n]s", name);
+    
+    printf("Enter Marks in Physics: ");
+    scanf("%f", &physicsMarks);
+    
+    printf("Enter Marks in Math: ");
+    scanf("%f", &mathMarks);
+    
+    printf("Enter Marks in Chemistry: ");
+    scanf("%f", &chemistryMarks);
+    
+    totalMarks = physicsMarks + mathMarks + chemistryMarks;
+    percentage = (totalMarks / 300) * 100;
+    
+    printf("\n");
+    printf("------ Student Summary ------\n");
+    printf("Roll No: %d\n", rollNo);
+    printf("Name: %s\n", name);
+    printf("Physics Marks: %.2f\n", physicsMarks);
+    printf("Math Marks: %.2f\n", mathMarks);
+    printf("Chemistry Marks: %.2f\n", chemistryMarks);
+    printf("Total Marks: %.2f\n", totalMarks);
+    printf("Percentage: %.2f%%\n", percentage);
+    
+    return 0;
+}
+
+//Question -4
+#include <stdio.h>
+
+int main() {
+    float operand1, operand2, result;
+    char operator;
+
+    printf("Enter Number 1: ");
+    scanf("%f", &operand1);
+
+    printf("Enter the operator (+, -, *, /): ");
+    scanf(" %c", &operator);
+
+    printf("Enter Number 2: ");
+    scanf("%f", &operand2);
+
+    switch (operator) {
+        case '+':
+            result = operand1 + operand2;
+            printf("Result: %.2f\n", result);
+            break;
+        case '-':
+            result = operand1 - operand2;
+            printf("Result: %.2f\n", result);
+            break;
+        case '*':
+            result = operand1 * operand2;
+            printf("Result: %.2f\n", result);
+            break;
+        case '/':
+            if (operand2 != 0) {
+                result = operand1 / operand2;
+                printf("Result: %.2f\n", result);
+            } else {
+                printf("Error: Division by zero is not allowed!\n");
+            }
+            break;
+        default:
+            printf("Error: Invalid operator entered!\n");
+            break;
+    }
+
+    return 0;
+}
+
+//Question -5
+
+#include <stdio.h>
+
+unsigned int performBitOperations(unsigned int num, int operationType) {
+    switch (operationType) {
+        case 1:
+            num |= (1u << 0);  // Set 1st bit
+            break;
+        case 2:
+            num &= ~(1u << 31);  // Clear 31st bit
+            break;
+        case 3:
+            num ^= (1u << 15);  // Toggle 16th bit
+            break;
+        default:
+            printf("Invalid operation type!\n");
+            break;
+    }
+
+    return num;
+}
+
+int main() {
+    unsigned int number;
+    int operationType;
+    
+    printf("Enter a 32-bit integer: ");
+    scanf("%u", &number);
+
+    printf("Enter the operation type (1, 2, or 3): ");
+    scanf("%d", &operationType);
+
+    unsigned int result = performBitOperations(number, operationType);
+
+    printf("Result: %u\n", result);
+
+    return 0;
+}
+
